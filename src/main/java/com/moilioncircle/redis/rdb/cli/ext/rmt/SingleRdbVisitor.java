@@ -106,7 +106,9 @@ public class SingleRdbVisitor extends AbstractMigrateRdbVisitor implements Event
                 endpoint.get().batch(flush, RESTORE, dkv.getKey(), expire, dkv.getValue());
             } else if (legacy) {
                 // https://github.com/leonchen83/redis-rdb-cli/issues/6
-                eval(dkv.getKey(), dkv.getValue(), expire);
+                // eval(dkv.getKey(), dkv.getValue(), expire);
+                endpoint.get().batch(flush, DEL, dkv.getKey());
+                endpoint.get().batch(flush, RESTORE, dkv.getKey(), expire, dkv.getValue());
             } else {
                 endpoint.get().batch(flush, RESTORE, dkv.getKey(), expire, dkv.getValue(), REPLACE);
             }
